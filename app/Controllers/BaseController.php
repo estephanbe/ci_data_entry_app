@@ -34,6 +34,13 @@ class BaseController extends Controller
 	protected $segments = array();
 
 	/**
+	 * Instance of the main Request object.
+	 *
+	 * @var HTTP\IncomingRequest
+	 */
+	protected $request;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param RequestInterface  $request

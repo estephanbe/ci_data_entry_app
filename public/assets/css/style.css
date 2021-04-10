@@ -6,7 +6,6 @@ html {
 body {
     padding: 0;
     margin: 0;
-    height: 100vh;
     font-family: "Nunito Sans";
 }
 
@@ -97,6 +96,20 @@ a:hover {
     font-size: 130%!important;
     font-weight: bold!important;
 }
+
+#uae-page-number-wrapper {
+    font-size: 130%;
+}
+
+
+
+
+
+
+
+
+
+
 
 @media print {
     #aue-nav *, 

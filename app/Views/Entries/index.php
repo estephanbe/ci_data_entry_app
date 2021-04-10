@@ -5,10 +5,10 @@
             <div class="d-flex">
                 <span class="uae-search-seperator">في</span>
                 <select name="search-type" id="aue-search-type" class="me-2 form-select w-75">
-                    <option value="">الأسماء</option>
-                    <option value="">البلدان</option>
-                    <option value="">الجنسيات</option>
-                    <option value="">المِهن</option>
+                    <option value="name">الأسماء</option>
+                    <option value="country">البلدان</option>
+                    <option value="natonality">الجنسيات</option>
+                    <option value="occupation">المِهن</option>
                 </select>
                 <span class="uae-search-seperator">عن</span>
             </div>
@@ -37,6 +37,8 @@
     </div>
 </div>
 
+<?php echo $entries_count; ?>
+
 <div id="aue-main-table" class="m-5 mt-3">
     <table class="table table-hover">
         <thead>
@@ -53,22 +55,22 @@
         </thead>
         <tbody>
             <?php foreach ($entries as $value) : ?>
-                <tr>
+                <tr id="uae-table-single-entry-<?= $value['id'] ?>">
                     <td scope="row" class="uae-select-wrapper">
                         <input class="form-check-input uae-select" type="checkbox" value="">
                     </td>
-                    <td><?php echo $value['name']; ?></td>
-                    <td><?php echo $value['country']; ?></td>
-                    <td><?php echo $value['nationality']; ?></td>
-                    <td><?php echo $value['occupation']; ?></td>
+                    <td><?= $value['name'] ?></td>
+                    <td><?= $value['country'] ?></td>
+                    <td><?= $value['nationality'] ?></td>
+                    <td><?= $value['occupation'] ?></td>
                     <td class="uae-single-action">
-                        <a href="<?php echo base_url('entries/' . $value['id']) ?>" class="uae-action-btn badge rounded-pill bg-success">
+                        <a href="<?= base_url('entries/' . $value['id']) ?>" class="uae-action-btn badge rounded-pill bg-success">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="<?php echo base_url('entries/' . $value['id'] . '/edit'); ?>" class="uae-action-btn badge rounded-pill bg-warning">
+                        <a href="<?= base_url('entries/' . $value['id'] . '/edit'); ?>" class="uae-action-btn badge rounded-pill bg-warning">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
-                        <a href="" class="uae-action-btn badge rounded-pill bg-danger">
+                        <a href="#" onclick="deleteEntry(<?= $value['id'] ?>, '<?= $value['name'] ?>')" class="uae-action-btn uae-action-btn-delete badge rounded-pill bg-danger">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>
@@ -76,4 +78,16 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+</div>
+
+<div class="row m-5">
+    <div class="col-4 d-flex justify-content-start align-items-center">
+        <button class="btn btn-primary btn-lg">الصفحة السابقة</button>
+    </div>
+    <div id="uae-page-number-wrapper" class="col-4 d-flex justify-content-center align-items-center">
+                صفحة رقم <span id="uae-page-number" class="me-2">1</span>
+    </div>
+    <div class="col-4 d-flex justify-content-end align-items-center">
+        <button class="btn btn-primary btn-lg">الصفحة التالية</button>
+    </div>
 </div>

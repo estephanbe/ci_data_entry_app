@@ -26,10 +26,11 @@ $link = [
 
 
 
-        <nav id="aue-nav" class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+        <nav id="aue-nav" class="navbar navbar-expand-lg navbar-light bg-light mb-2">
             <div class="container">
                 <a class="navbar-brand" href="<?php echo base_url(); ?>">
-                    نظام الإستمارة الإلكترونية
+                    <i class="bi bi-person-fill"></i>
+                    <?= session()->get('display_name') ?>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -49,14 +50,16 @@ $link = [
                                     إضافة متعاونين
                                 </a>
                             </li>
+                            <?php if (session()->get('is_admin')) : ?>
+                                <li class="nav-item">
+                                    <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url('users'); ?>">
+                                        <i class="bi bi-arrow-return-left ms-1"></i>
+                                        المستخدمين
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url('users'); ?>">
-                                    <i class="bi bi-arrow-return-left ms-1"></i>
-                                    المستخدمين
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url(); ?>">
+                                <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url('login/logout'); ?>">
                                     <i class="bi bi-arrow-return-left ms-1"></i>
                                     خروج
                                 </a>
@@ -67,6 +70,13 @@ $link = [
             </div>
         </nav>
 
-        <div class="container">
+        <div class="text-center mb-5">
+            <h1>
+                نظام الإستمارة الإلكترونية
+            </h1>
+        </div>
+
+        <div class="container mb-5">
+
 
         <?php endif; ?>

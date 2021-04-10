@@ -91,7 +91,8 @@ class Init extends Migration
 
 	public function down()
 	{
-		//
+		$this->forge->dropTable($this->users_table);
+		$this->forge->dropTable($this->entries_table);
 	}
 
 	private function add_init_users()

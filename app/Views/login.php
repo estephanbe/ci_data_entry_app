@@ -10,32 +10,32 @@
             <h1>نظام الإستمارة الإلكترونية</h1>
         </div>
         <?php echo form_open('login/authenticate', array('class' => 'w-50 needs-validation')) ?>
-        <!-- <form class="w-50 needs-validation" action="#"> -->
-            <div class="mb-3">
-                <div class="d-flex flex-nowrap">
-                    <div class="ps-2 d-flex justify-content-center align-items-center">
-                        <i class="bi bi-person"></i>
-                    </div>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="إسم المستخدم" required>
+        <div class="mb-3">
+            <div class="d-flex flex-nowrap">
+                <div class="ps-2 d-flex justify-content-center align-items-center">
+                    <i class="bi bi-person"></i>
                 </div>
-                <div class="valid-feedback">
-                    يرجى إدخال إسم المستخدم!
+                <input type="text" class="form-control" id="login-username" placeholder="إسم المستخدم" name="username" required>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="d-flex flex-nowrap">
+                <div class="ps-2 d-flex justify-content-center align-items-center">
+                    <i class="bi bi-lock"></i>
+                </div>
+                <input type="password" class="form-control" id="login-password" placeholder="كلمة المرور" name="password" required>
+            </div>
+        </div>
+        <?php if (isset($validation)) : ?>
+            <div class="col-12">
+                <div class="alert alert-danger" role="alert">
+                    <?= $validation->listErrors() ?>
                 </div>
             </div>
-            <div class="mb-3">
-                <div class="d-flex flex-nowrap">
-                    <div class="ps-2 d-flex justify-content-center align-items-center">
-                        <i class="bi bi-lock"></i>
-                    </div>
-                    <input type="password" class="form-control" id="exampleFormControlInput2" placeholder="كلمة المرور" required>
-                </div>
-                    <div class="valid-feedback">
-                    يرجى إدخال كلمة المرور!
-                </div>
-            </div>
-            <div class="d-flex justify-content-center align-items-center w-100">
-                <button type="submit" class="btn btn-custom btn-lg btn-block mt-3 me-5 w-50">دخول</button>
-            </div>
+        <?php endif; ?>
+        <div class="d-flex justify-content-center align-items-center w-100">
+            <button type="submit" class="btn btn-custom btn-lg btn-block mt-3 me-5 w-50">دخول</button>
+        </div>
         </form>
     </div>
 </div>
