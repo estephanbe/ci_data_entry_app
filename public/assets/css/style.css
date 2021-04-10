@@ -1,0 +1,139 @@
+html {
+    direction: rtl;
+}
+
+
+body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    font-family: "Nunito Sans";
+}
+
+.form-control {
+    line-height: 2;
+}
+
+.bg-custom {
+    background-color: #fff;
+}
+
+.btn-custom {
+    background-color: #3e3d56;
+    color: #fff;
+}
+
+.btn-custom:hover {
+    background-color: #33313f;
+    color: rgb(173, 165, 165);
+}
+
+label {
+    color: #555;
+}
+
+a,
+a:hover {
+    color: #555;
+    text-decoration: none;
+}
+
+a,
+a:hover {
+    text-decoration: none;
+}
+
+@media(max-width: 932px) {
+    .display-none {
+        display: none !important;
+    }
+}
+
+#aue-login .bi-person, #aue-login .bi-lock {
+    font-size: 250%;
+}
+
+#aue-nav .navbar-nav .nav-item:hover {
+    opacity: .8;
+}
+
+.uae-search-seperator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: .5rem;
+    font-size: 110%;
+}
+
+#uae-select-all-wrapper {
+    width: 10%!important;
+}
+
+.uae-select-wrapper {
+    width: 10%!important;
+}
+
+.uae-single-action-header {
+    width: 15%!important;
+}
+
+.uae-single-action {
+    width: 15%!important;
+}
+
+#aue-num-of-entries {
+    max-width: 20%!important;
+}
+
+#uae-single-entry {
+    font-size: 150%;
+}
+
+#uae-single-entry .table tr th {
+    width: 15%!important;
+}
+
+#uae-single-add form label {
+    font-size: 130%!important;
+    font-weight: bold!important;
+}
+
+@media print {
+    #aue-nav *, 
+    #uae-action-main-header *, 
+    #uae-select-all-wrapper, 
+    .uae-select-wrapper, 
+    .uae-single-action-header, 
+    .uae-single-action, 
+    #uae-single-entry #uae-single-actions * {
+        display: none;
+    }
+
+    /* Print query for selected coloumns */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* REMOVE !!!!!! */
+#toolbarContainer * {
+    direction: ltr!important;
+}
