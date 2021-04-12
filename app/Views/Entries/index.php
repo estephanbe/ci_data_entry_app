@@ -70,7 +70,7 @@
                         <a href="<?= base_url('entries/' . $value['id'] . '/edit'); ?>" class="uae-action-btn badge rounded-pill bg-warning">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
-                        <a href="#" onclick="deleteEntry(<?= $value['id'] ?>, '<?= $value['name'] ?>')" class="uae-action-btn uae-action-btn-delete badge rounded-pill bg-danger">
+                        <a href="#" onclick="deleteEntryTable(<?= $value['id'] ?>, '<?= $value['name'] ?>')" class="uae-action-btn uae-action-btn-delete badge rounded-pill bg-danger">
                             <i class="bi bi-trash"></i>
                         </a>
                     </td>

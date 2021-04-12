@@ -4,10 +4,10 @@
             <button type="button" class="btn btn-success btn-lg" onclick="window.print();">
                 طباعة
             </button>
-            <button type="button" class="btn btn-warning btn-lg ms-3 me-3">
+            <a type="button" href="<?= base_url('entries/' . $entry['id'] . '/edit'); ?>" class="btn btn-warning btn-lg ms-3 me-3">
                 تعديل
-            </button>
-            <button type="button" class="btn btn-danger btn-lg">
+            </a>
+            <button type="button" class="btn btn-danger btn-lg" onclick="deleteSingleEntry(<?= $entry['id'] . ', \'' . $entry['name'] . '\'' ?>);">
                 حذف
             </button>
         </div>

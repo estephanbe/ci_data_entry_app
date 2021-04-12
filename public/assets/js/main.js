@@ -59,19 +59,19 @@ $(function () {
             var value = $('#aue-num-of-entries option:selected').val();
             var url = window.location.href;
             if (url.indexOf('?') > -1) {
-                url = window.location.href.slice(0, window.location.href.indexOf('?')+1);
+                url = window.location.href.slice(0, window.location.href.indexOf('?') + 1);
                 const queryString = new URL(window.location.href);
                 const urlParams = new URLSearchParams(queryString.search.slice(1));
                 var counter = 1;
-                for (pair of urlParams.entries()){
+                for (pair of urlParams.entries()) {
                     var paramVal = pair[0] === 'per_page' ? value : pair[1];
-                    if(counter === 1) {
+                    if (counter === 1) {
                         url += pair[0] + '=' + paramVal;
                     } else {
                         url += '&' + pair[0] + '=' + paramVal;
                     }
                     counter++;
-                }                
+                }
             } else {
                 url += '?per_page=' + value;
             }
@@ -86,6 +86,38 @@ $(function () {
             console.log(perPage);
             $('#aue-num-of-entries option[value=' + perPage + ']').prop('selected', true);
         }
+    }
+
+    if ($('#uae-single-update').length) {
+        $('#uae-single-update form').submit((e) => {
+            e.preventDefault();
+            var id = $('#uae-single-update input[name="id"]').val();
+            var name = $('#uae-single-update input[name="name"]').val();
+            var country = $('#uae-single-update input[name="country"]').val();
+            var nationality = $('#uae-single-update input[name="nationality"]').val();
+            var occupation = $('#uae-single-update input[name="occupation"]').val();
+            var photo_url = $('#uae-single-update input[name="photo_url"]').val();
+
+            $.ajax({
+                type: "PUT",
+                url: baseUrl + 'entries/' + id,
+                data: {
+                    "name" : name,
+                    "country" : country,
+                    "nationality" : nationality,
+                    "occupation" : occupation,
+                    "photo_url" : photo_url,
+                },
+                contentType: "application/json",
+            }).done((res) => {
+                // alert('تم تحديث المتعاون بنجاح!');
+                console.log(res);
+                // window.location.href = '../';
+            }).fail((res) =>{
+                console.log(res);
+                alert('لقد حدث خطأ!');
+            });
+        });
     }
 
 });
@@ -104,7 +136,7 @@ function readURL(input) {
     }
 }
 
-function deleteEntry(id, name) {
+function deleteEntryTable(id, name) {
     if (window.confirm('هل أنت متأكد من حذف المتعاون ' + name + '؟')) {
         $.ajax({
             type: "DELETE",
@@ -112,6 +144,20 @@ function deleteEntry(id, name) {
         }).done((res) => {
             $('#uae-table-single-entry-' + id).hide();
             console.log('done');
+        }).fail((res) => {
+            console.log('failed');
+        });
+    }
+}
+
+function deleteSingleEntry(id, name) {
+    if (window.confirm('هل أنت متأكد من حذف المتعاون ' + name + '؟')) {
+        $.ajax({
+            type: "DELETE",
+            url: baseUrl + 'entries/' + id,
+        }).done((res) => {
+            alert('لقد تم حذف المعاون!');
+            window.location.href = baseUrl;
         }).fail((res) => {
             console.log('failed');
         });
