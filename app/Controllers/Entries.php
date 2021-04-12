@@ -3,11 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\Entry;
+use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use PHPUnit\Util\Json;
 
 class Entries extends BaseController
 {
+	use ResponseTrait;
+
 	public function index()
 	{
 		$entries = new Entry();
@@ -39,11 +42,11 @@ class Entries extends BaseController
 	{
 		$entry = new Entry();
 		$the_entry = array();
-		
 
-		if (! $the_entry = $entry->find($id)){
+
+		if (!$the_entry = $entry->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-		} elseif ($the_entry['soft_delete']){
+		} elseif ($the_entry['soft_delete']) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
@@ -121,11 +124,11 @@ class Entries extends BaseController
 	{
 		$entry = new Entry();
 		$the_entry = array();
-		
 
-		if (! $the_entry = $entry->find($id)){
+
+		if (!$the_entry = $entry->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-		} elseif ($the_entry['soft_delete']){
+		} elseif ($the_entry['soft_delete']) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
@@ -159,9 +162,7 @@ class Entries extends BaseController
 
 	public function update($id)
 	{
-		
-		
-		if ($this->request->getMethod() !== 'put' && ! $this->request->isAJAX()) {
+		if ($this->request->getMethod() !== 'put' && !$this->request->isAJAX()) {
 			return redirect()->to('entries/new');
 		}
 
@@ -182,19 +183,24 @@ class Entries extends BaseController
 		if ($this->validate($rules, $errors)) {
 			$model = new Entry();
 
-			$the_entry = $this->request->getRawInput();
-
-			return json_encode($the_entry);
+			$the_entry = $this->request->getJSON();
 
 			$newData = [
-				'name' => $the_entry['name'],
-				'country' => $the_entry['country'],
-				'nationality' => $the_entry['nationality'],
-				'occupation' => $the_entry['occupation'],
-				'photo_url' => $the_entry['photo_url'],
+				'name' => $the_entry->name,
+				'country' => $the_entry->country,
+				'nationality' => $the_entry->nationality,
+				'occupation' => $the_entry->occupation,
+				'photo_url' => $the_entry->photo_url,
 			];
-			$model->update($id, $newData);
-			return true;
+			
+			if ($model->update($id, $newData)) {
+				$msg = 'Content updated sucessfully';
+				$code = 200;
+			} else {
+				$msg = 'There was an error while updating the entry!';
+				$code = 422;
+			}
+			return $this->respond($newData, $code, $msg);
 		}
 
 		return false;

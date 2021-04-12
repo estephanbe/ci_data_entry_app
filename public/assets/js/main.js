@@ -101,20 +101,20 @@ $(function () {
             $.ajax({
                 type: "PUT",
                 url: baseUrl + 'entries/' + id,
-                data: {
+                data: JSON.stringify( {
                     "name" : name,
                     "country" : country,
                     "nationality" : nationality,
                     "occupation" : occupation,
                     "photo_url" : photo_url,
-                },
+                }),
                 contentType: "application/json",
-            }).done((res) => {
-                // alert('تم تحديث المتعاون بنجاح!');
-                console.log(res);
-                // window.location.href = '../';
-            }).fail((res) =>{
-                console.log(res);
+            }).done((data, textStatus, jqXHR) => {
+                alert('تم تحديث المتعاون بنجاح!');
+                console.log(data, textStatus, jqXHR);
+                window.location.href = '../';
+            }).fail((data, textStatus, jqXHR) =>{
+                console.log(data, textStatus, jqXHR);
                 alert('لقد حدث خطأ!');
             });
         });
