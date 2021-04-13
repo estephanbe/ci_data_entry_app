@@ -46,40 +46,6 @@ $(function () {
         });
     }
 
-    if ($('#aue-users-table').length) {
-        var myModal = new bootstrap.Modal(document.getElementById('passwordUpdate'));
-        $('.uae-user-action-btn').click((e) => {
-            e.preventDefault();
-            myModal.show();
-        });
-
-        $('#uae-form-submit-btn').click((e) => {
-            e.preventDefault();
-            var empty_validation = true;
-            var match_validation = true;
-            if ($('#uae-pass').val() === '' || $('#uae-pass-again').val() === '') {
-                $('#uae-pass-validation-error-empty').removeClass('d-none');
-                empty_validation = false
-            } else {
-                $('#uae-pass-validation-error-empty').addClass('d-none');
-                empty_validation = true
-            }
-
-            if ($('#uae-pass').val() !== $('#uae-pass-again').val()) {
-                $('#uae-pass-validation-error').removeClass('d-none');
-                match_validation = false
-            } else {
-                $('#uae-pass-validation-error').addClass('d-none');
-                match_validation = true
-            }
-
-
-            if (empty_validation && match_validation) {
-                $('#uae-pass-submission-form').submit();
-            }
-        });
-    }
-
     if ($('#uae-action-main-header').length) {
         $('#aue-num-of-entries').change((e) => {
             var value = $('#aue-num-of-entries option:selected').val();
@@ -183,34 +149,20 @@ $(function () {
 
     }
 
-    // if ($('#uae-single-update').length) {
-    //     $('#uae-single-update form').submit((e) => {
-    //         e.preventDefault();
-    //         var id = $('#uae-single-update input[name="id"]').val();
-    //         var name = $('#uae-single-update input[name="name"]').val();
-    //         var country = $('#uae-single-update input[name="country"]').val();
-    //         var nationality = $('#uae-single-update input[name="nationality"]').val();
-    //         var occupation = $('#uae-single-update input[name="occupation"]').val();
-    //         $.ajax({
-    //             type: "PUT",
-    //             url: baseUrl + 'entries/' + id,
-    //             data: JSON.stringify({
-    //                 "name": name,
-    //                 "country": country,
-    //                 "nationality": nationality,
-    //                 "occupation": occupation,
-    //             }),
-    //             contentType: "application/json",
-    //         }).done((data, textStatus, jqXHR) => {
-    //             alert('تم تحديث المتعاون بنجاح!');
-    //             console.log(data, textStatus, jqXHR);
-    //             window.location.href = '../';
-    //         }).fail((data, textStatus, jqXHR) => {
-    //             console.log(data, textStatus, jqXHR);
-    //             alert('لقد حدث خطأ!');
-    //         });
-    //     });
-    // }
+    if ($('.uae-toggle-pass').length) {
+        $('.uae-toggle-pass').click((e) => {
+            e.preventDefault();
+            if ($(e.target).hasClass('bi-eye-fill')){
+                $(e.target).parent().siblings('input').attr('type', 'text');
+            }else if ($(e.target).hasClass('bi-eye-slash-fill')){
+                $(e.target).parent().siblings('input').attr('type', 'password');
+            }
+            $(e.target).toggleClass('bi-eye-fill');
+            $(e.target).toggleClass('bi-eye-slash-fill');
+            
+            
+        });
+    }
 
 });
 

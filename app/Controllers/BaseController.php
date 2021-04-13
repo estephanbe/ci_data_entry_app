@@ -58,13 +58,14 @@ class BaseController extends Controller
 		// Preload any models, libraries, etc, here.
 		//--------------------------------------------------------------------
 		// E.g.: $this->session = \Config\Services::session();
-
+		
 		$this->segments = $request->uri->getSegments();
-
+		
 		if ( empty($this->segments) ) 
 			$this->segments[0] = '/';
 		
-		$this->view_data['segments'] = $this->segments;		
+		$this->view_data['segments'] = $this->segments;
+
 	}
 
 	protected function view_data(array $data, bool $add = false)

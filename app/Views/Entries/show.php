@@ -4,6 +4,7 @@
             <button type="button" class="btn btn-success btn-lg" onclick="window.print();">
                 طباعة
             </button>
+            
             <a type="button" href="<?= base_url('entries/' . $entry['id'] . '/edit'); ?>" class="btn btn-warning btn-lg ms-3 me-3">
                 تعديل
             </a>

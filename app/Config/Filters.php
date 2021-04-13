@@ -21,7 +21,10 @@ class Filters extends BaseConfig
 		'honeypot' => Honeypot::class,
 		'auth' => \App\Filters\Auth::class,
 		'noauth' => \App\Filters\Noauth::class,
-		'userscheck' => \App\Filters\UsersCheck::class,
+		'admin_check' => array(
+			\App\Filters\UsersCheck::class,
+			\App\Filters\Auth::class
+		),
 	];
 
 	/**
@@ -32,7 +35,7 @@ class Filters extends BaseConfig
 	 */
 	public $globals = [
 		'before' => [
-			'userscheck'
+			// 'userscheck'
 			// 'honeypot',
 			// 'csrf',
 		],

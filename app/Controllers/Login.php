@@ -30,7 +30,7 @@ class Login extends BaseController
 			//let's do the validation here
 			$rules = [
 				'username' => 'required|min_length[6]|max_length[50]',
-				'password' => 'required|min_length[8]|max_length[255]|validateUser[username,password]',
+				'password' => 'required|validateUser[username,password]',
 			];
 
 			$errors = [

@@ -102,7 +102,14 @@ a:hover {
 }
 
 
+.uae-toggle-pass {
+    margin-left: 1rem;
+    margin-top: -2rem;
+}
 
+.uae-toggle-pass:hover {
+    cursor: pointer;
+}
 
 
 

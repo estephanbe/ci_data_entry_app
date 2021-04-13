@@ -25,6 +25,9 @@ class UsersCheck implements FilterInterface
    */
   public function before(RequestInterface $request, $arguments = null)
   {
+    if(! session()->get('is_admin')) {
+      return redirect()->to('/');
+    }
     // Do something here
     // If segment 1 == users
     //we have to redirect the request to the second segment

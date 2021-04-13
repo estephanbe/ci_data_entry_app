@@ -44,13 +44,13 @@ $link = [
                                     الرئيسية
                                 </a>
                             </li>
-                            <li class="nav-item ms-2">
-                                <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url('entries/new'); ?>">
-                                    <i class="bi bi-arrow-return-left ms-1"></i>
-                                    إضافة متعاونين
-                                </a>
-                            </li>
                             <?php if (session()->get('is_admin')) : ?>
+                                <li class="nav-item ms-2">
+                                    <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url('entries/new'); ?>">
+                                        <i class="bi bi-arrow-return-left ms-1"></i>
+                                        إضافة متعاونين
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link d-flex align-items-center" aria-current="page" href="<?php echo base_url('users'); ?>">
                                         <i class="bi bi-arrow-return-left ms-1"></i>

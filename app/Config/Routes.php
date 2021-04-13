@@ -7,8 +7,7 @@ $routes = Services::routes();
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 // can override as needed.
-if (file_exists(SYSTEMPATH . 'Config/Routes.php'))
-{
+if (file_exists(SYSTEMPATH . 'Config/Routes.php')) {
 	require SYSTEMPATH . 'Config/Routes.php';
 }
 
@@ -34,11 +33,25 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('login', 'Login::index', ['filter' => 'noauth']);
 
-$routes->resource('entries');
+// $routes->resource('entries');
+
+
+
 $routes->get('/', 'Entries::index', ['filter' => 'auth']);
+$routes->get('entries/(:int)', 'Entries::show/$1', ['filter' => 'auth']);
+$routes->get('entries/new', 'Entries::new', ['filter' => 'admin_check']);
+$routes->post('entries', 'Entries::create', ['filter' => 'admin_check']);
+$routes->get('entries/(:int)/edit', 'Entries::edit/$1', ['filter' => 'admin_check']);
+$routes->post('/entries/update_entry/(:int)', 'Entries::update_entry', ['filter' => 'admin_check']);
+$routes->delete('entries/(:int)', 'Entries::delete/$1', ['filter' => 'admin_check']);
 $routes->post('/entries/excel_export', 'Entries::excel_export', ['filter' => 'auth']);
-$routes->post('/entries/update_entry/(:int)', 'Entries::update_entry', ['filter' => 'auth']);
-$routes->get('/users', 'User::index', ['filter' => 'auth']);
+
+
+$routes->get('/users', 'User::index', ['filter' => 'admin_check']);
+$routes->get('/users/new', 'User::new', ['filter' => 'admin_check']);
+$routes->post('/users/create', 'User::create', ['filter' => 'admin_check']);
+$routes->get('/users/edit/', 'User::edit', ['filter' => 'admin_check']);
+$routes->post('/users/update', 'User::update', ['filter' => 'admin_check']);
 
 // $routes->resource('photos');
 
@@ -65,7 +78,6 @@ $routes->get('/users', 'User::index', ['filter' => 'auth']);
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */
-if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php'))
-{
+if (file_exists(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
 	require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }

@@ -77,12 +77,14 @@
                         <a href="<?= base_url('entries/' . $value['id']) ?>" class="uae-action-btn badge rounded-pill bg-success">
                             <i class="bi bi-eye"></i>
                         </a>
+                        <?php if (session()->get('is_admin')) : ?>
                         <a href="<?= base_url('entries/' . $value['id'] . '/edit'); ?>" class="uae-action-btn badge rounded-pill bg-warning">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
                         <a href="#" onclick="deleteEntryTable(<?= $value['id'] ?>, '<?= $value['name'] ?>')" class="uae-action-btn uae-action-btn-delete badge rounded-pill bg-danger">
                             <i class="bi bi-trash"></i>
                         </a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

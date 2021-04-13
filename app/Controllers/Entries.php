@@ -114,7 +114,7 @@ class Entries extends BaseController
 
 			$file = $this->request->getFile('photo_url');
 			$file_path = '';
-			if ($file->isValid()){
+			if ($file->isValid()) {
 				$newName = $file->getRandomName();
 				$file->store('../../public/uploads/', $newName);
 				$file_path = base_url() . '/uploads/' . $newName;
@@ -171,7 +171,7 @@ class Entries extends BaseController
 		echo view('templates/footer', $this->view_data);
 	}
 
-	public function update_entry($id)	
+	public function update_entry($id)
 	{
 
 		if ($this->request->getMethod() !== 'post') {
@@ -199,7 +199,7 @@ class Entries extends BaseController
 
 			$file = $this->request->getFile('photo_url');
 			$file_path = '';
-			if ($file->isValid()){
+			if ($file->isValid()) {
 				$newName = $file->getRandomName();
 				$file->store('../../public/uploads/', $newName);
 				$file_path = base_url() . '/uploads/' . $newName;
