@@ -33,9 +33,9 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('login', 'Login::index', ['filter' => 'noauth']);
 
+
+// I removed this because I didn't know how to apply filters on some of the resources!
 // $routes->resource('entries');
-
-
 
 $routes->get('/', 'Entries::index', ['filter' => 'auth']);
 $routes->get('entries/(:segment)', 'Entries::show/$1', ['filter' => 'auth']);
