@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Models\Entry;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\Exceptions\PageNotFoundException;
-use PHPUnit\Util\Json;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Entries extends BaseController
 {
@@ -14,23 +16,34 @@ class Entries extends BaseController
 	public function index()
 	{
 		$entries = new Entry();
+
 		$entries_count = $entries->where('soft_delete', 0)->countAllResults(false);
 
-		$entries_reslut = $entries->where('soft_delete', 0);
-		$all_entries = $entries_reslut->findAll();
+		$is_search = false;
+		$search_filter = $this->request->getVar('search_filter');
+		$search_term = $this->request->getVar('search_term');
 
-		if (!$this->request->getVar('page') && !$this->request->getVar('per_page')) {
-			$all_entries =  array_splice($all_entries, 0, 10);
+		if ($search_filter && $search_term) {
+			$is_search = true;
+			$all_entries = $entries
+				->like($search_filter, $search_term)
+				->having('soft_delete = 0')
+				->findAll();
 		} else {
-			$all_entries =  $this->get_entries_by_page($entries_reslut->findAll());
+			$all_entries = $entries->where('soft_delete', 0)->findAll();
+			if (!$this->request->getVar('page') && !$this->request->getVar('per_page')) {
+				$all_entries =  array_splice($all_entries, 0, 10);
+			} else {
+				$all_entries =  $this->get_entries_by_page($all_entries);
+			}
 		}
-
 
 		$this->view_data(
 			array(
 				'title' => 'الرئيسية',
 				'entries' => $all_entries,
-				'entries_count' => $entries_count
+				'entries_count' => $entries_count,
+				'is_search' => $is_search
 			)
 		);
 		echo view('templates/header', $this->view_data);
@@ -97,6 +110,16 @@ class Entries extends BaseController
 		);
 
 		if ($this->validate($rules, $errors)) {
+
+
+			$file = $this->request->getFile('photo_url');
+			$file_path = '';
+			if ($file->isValid()){
+				$newName = $file->getRandomName();
+				$file->store('../../public/uploads/', $newName);
+				$file_path = base_url() . '/uploads/' . $newName;
+			}
+
 			$model = new Entry();
 
 			$newData = [
@@ -104,7 +127,7 @@ class Entries extends BaseController
 				'country' => $this->request->getVar('country'),
 				'nationality' => $this->request->getVar('nationality'),
 				'occupation' => $this->request->getVar('occupation'),
-				'photo_url' => $this->request->getVar('photo_url'),
+				'photo_url' => $file_path,
 			];
 			$model->save($newData);
 			session()->setFlashdata('success', 'تم إضافة المتعاون بنجاح!');
@@ -133,18 +156,6 @@ class Entries extends BaseController
 		}
 
 		$this->view_data(array(
-			'title' => 'عرض المتعاون',
-			'entry' => array(
-				"id" => $the_entry['id'],
-				"name" => $the_entry['name'],
-				"country" => $the_entry['country'],
-				"nationality" => $the_entry['nationality'],
-				"occupation" => $the_entry['occupation'],
-				"photo_url" => $the_entry['photo_url'],
-			)
-		));
-
-		$this->view_data(array(
 			'title' => 'تحديث متعاون',
 			'entry' => array(
 				"id" => $the_entry['id'],
@@ -160,14 +171,17 @@ class Entries extends BaseController
 		echo view('templates/footer', $this->view_data);
 	}
 
-	public function update($id)
+	public function update_entry($id)	
 	{
-		if ($this->request->getMethod() !== 'put' && !$this->request->isAJAX()) {
+
+		if ($this->request->getMethod() !== 'post') {
 			return redirect()->to('entries/new');
 		}
 
+		$model = new Entry();
+
 		$rules = array(
-			'name' => 'required|min_length[3]|max_length[50]|is_unique[entries.name]',
+			'name' => 'required|min_length[3]|max_length[50]',
 			'country' => 'max_length[50]',
 			'nationality' => 'max_length[50]',
 			'occupation' => 'max_length[50]',
@@ -176,32 +190,38 @@ class Entries extends BaseController
 		$errors = array(
 			'name' => array(
 				'required' => 'يجب أن تدخل الإسم!',
-				'is_unique' => 'هذا الإسم موجود، تحقق من المتعاونيين!'
 			)
 		);
 
 		if ($this->validate($rules, $errors)) {
+
+			$original_entry = $model->find($id);
+
+			$file = $this->request->getFile('photo_url');
+			$file_path = '';
+			if ($file->isValid()){
+				$newName = $file->getRandomName();
+				$file->store('../../public/uploads/', $newName);
+				$file_path = base_url() . '/uploads/' . $newName;
+			} else {
+				$file_path = $original_entry['photo_url'];
+			}
+
 			$model = new Entry();
 
-			$the_entry = $this->request->getJSON();
-
 			$newData = [
-				'name' => $the_entry->name,
-				'country' => $the_entry->country,
-				'nationality' => $the_entry->nationality,
-				'occupation' => $the_entry->occupation,
-				'photo_url' => $the_entry->photo_url,
+				'name' => $this->request->getVar('name'),
+				'country' => $this->request->getVar('country'),
+				'nationality' => $this->request->getVar('nationality'),
+				'occupation' => $this->request->getVar('occupation'),
+				'photo_url' => $file_path,
 			];
-			
-			if ($model->update($id, $newData)) {
-				$msg = 'Content updated sucessfully';
-				$code = 200;
-			} else {
-				$msg = 'There was an error while updating the entry!';
-				$code = 422;
-			}
-			return $this->respond($newData, $code, $msg);
+			$model->update($id, $newData);
+			session()->setFlashdata('success', 'تم تحديث المتعاون بنجاح!');
+			return redirect()->to('/entries/' . $id . '/edit');
 		}
+
+		echo 1;
 
 		return false;
 	}
@@ -212,6 +232,47 @@ class Entries extends BaseController
 		$model->update($id, array('soft_delete' => 1));
 
 		return true;
+	}
+
+	public function excel_export()
+	{
+		$entries_to_be_exported = $this->request->getVar('entries_to_be_exported');
+		$entries_to_be_exported = explode(',', $entries_to_be_exported);
+
+		$entries = new Entry();
+		$entries = $entries
+			->whereIn('id', $entries_to_be_exported)
+			->findAll();
+
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet()->setRightToLeft(true);
+		$sheet->setCellValue('A1', 'الرقم');
+		$sheet->setCellValue('B1', 'الإسم');
+		$sheet->setCellValue('C1', 'البلد');
+		$sheet->setCellValue('D1', 'الجنسية');
+		$sheet->setCellValue('E1', 'المهنة');
+		$sheet->setCellValue('F1', 'رابط الصورة');
+		$sheet->setCellValue('G1', 'تاريخ الإنشاء');
+		$sheet->setCellValue('H1', 'تاريخ التحديث');
+
+		$counter = 2;
+		foreach ($entries as $entry) {
+			$sheet->setCellValue('A' . $counter, $entry['id']);
+			$sheet->setCellValue('B' . $counter, $entry['name']);
+			$sheet->setCellValue('C' . $counter, $entry['country']);
+			$sheet->setCellValue('D' . $counter, $entry['nationality']);
+			$sheet->setCellValue('E' . $counter, $entry['occupation']);
+			$sheet->setCellValue('F' . $counter, $entry['photo_url']);
+			$sheet->setCellValue('G' . $counter, $entry['created_at']);
+			$sheet->setCellValue('H' . $counter, $entry['updated_at']);
+
+			$counter++;
+		}
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('uploads/exported_data.xlsx');
+
+		return redirect()->to(base_url() . '/uploads/exported_data.xlsx');
 	}
 
 	private function get_entries_by_page($entries)

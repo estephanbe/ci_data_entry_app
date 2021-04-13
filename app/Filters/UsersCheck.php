@@ -28,15 +28,15 @@ class UsersCheck implements FilterInterface
     // Do something here
     // If segment 1 == users
     //we have to redirect the request to the second segment
-    $uri = service('uri');
-    if ($uri->getSegment(1) == 'users') {
-      if ($uri->getSegment(2) == '')
-        $segment = '/';
-      else
-        $segment = '/' . $uri->getSegment(2);
+    // $uri = service('uri');
+    // if ($uri->getSegment(1) == 'entries') {
+    //   if ($uri->getSegment(2) == '')
+    //     $segment = '/entries';
+    //   else
+    //     $segment = '/' . $uri->getSegment(2);
 
-      return redirect()->to($segment);
-    }
+    //   return redirect()->to($segment);
+    // }
   }
 
   /**

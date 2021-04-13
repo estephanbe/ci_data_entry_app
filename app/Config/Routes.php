@@ -36,6 +36,8 @@ $routes->get('login', 'Login::index', ['filter' => 'noauth']);
 
 $routes->resource('entries');
 $routes->get('/', 'Entries::index', ['filter' => 'auth']);
+$routes->post('/entries/excel_export', 'Entries::excel_export', ['filter' => 'auth']);
+$routes->post('/entries/update_entry/(:int)', 'Entries::update_entry', ['filter' => 'auth']);
 $routes->get('/users', 'User::index', ['filter' => 'auth']);
 
 // $routes->resource('photos');

@@ -118,7 +118,9 @@ a:hover {
     .uae-select-wrapper, 
     .uae-single-action-header, 
     .uae-single-action, 
-    #uae-single-entry #uae-single-actions * {
+    #uae-single-entry #uae-single-actions *,
+    #uae-main-page-pages-nav,
+    .uae-select-row:not(.selected-item-for-action) {
         display: none;
     }
 
