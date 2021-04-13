@@ -116,7 +116,7 @@ class Entries extends BaseController
 			$file_path = '';
 			if ($file->isValid()) {
 				$newName = $file->getRandomName();
-				$file->store('../../public/uploads/', $newName);
+				$file->store('../../../uploads/', $newName);
 				$file_path = base_url() . '/uploads/' . $newName;
 			}
 
@@ -201,7 +201,7 @@ class Entries extends BaseController
 			$file_path = '';
 			if ($file->isValid()) {
 				$newName = $file->getRandomName();
-				$file->store('../../public/uploads/', $newName);
+				$file->store('../../../uploads/', $newName);
 				$file_path = base_url() . '/uploads/' . $newName;
 			} else {
 				$file_path = $original_entry['photo_url'];
