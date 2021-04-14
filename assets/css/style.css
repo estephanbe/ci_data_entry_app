@@ -81,7 +81,7 @@ a:hover {
 }
 
 #aue-num-of-entries {
-    max-width: 20%!important;
+    width: auto!important;
 }
 
 #uae-single-entry {
@@ -132,6 +132,18 @@ a:hover {
     }
 
     /* Print query for selected coloumns */
+}
+
+@media screen and (min-width: 768px) {
+    #uae-main-search-wrapper {
+        max-width: 50%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    #uae-main-search-wrapper {
+        max-width: 25%;
+    }
 }
 
 
