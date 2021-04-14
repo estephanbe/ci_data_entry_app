@@ -51,7 +51,7 @@ class Entries extends BaseController
 		echo view('templates/footer', $this->view_data);
 	}
 
-	public function show(int $id)
+	public function show($id)
 	{
 		$entry = new Entry();
 		$the_entry = array();
@@ -143,7 +143,7 @@ class Entries extends BaseController
 		echo view('templates/footer', $this->view_data);
 	}
 
-	public function edit(int $id)
+	public function edit($id)
 	{
 		$entry = new Entry();
 		$the_entry = array();

@@ -38,12 +38,12 @@ $routes->get('login', 'Login::index', ['filter' => 'noauth']);
 // $routes->resource('entries');
 
 $routes->get('/', 'Entries::index', ['filter' => 'auth']);
-$routes->get('entries/(:segment)', 'Entries::show/$1', ['filter' => 'auth']);
 $routes->get('entries/new', 'Entries::new', ['filter' => 'admin_check']);
 $routes->post('entries', 'Entries::create', ['filter' => 'admin_check']);
+$routes->get('entries/(:segment)', 'Entries::show/$1', ['filter' => 'auth']);
 $routes->get('entries/(:segment)/edit', 'Entries::edit/$1', ['filter' => 'admin_check']);
-$routes->post('/entries/update_entry/(:int)', 'Entries::update_entry', ['filter' => 'admin_check']);
 $routes->delete('entries/(:segment)', 'Entries::delete/$1', ['filter' => 'admin_check']);
+$routes->post('/entries/update_entry/(:int)', 'Entries::update_entry', ['filter' => 'admin_check']);
 $routes->post('/entries/excel_export', 'Entries::excel_export', ['filter' => 'auth']);
 
 
