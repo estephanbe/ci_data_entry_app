@@ -52,8 +52,6 @@ $(function () {
         var perPage = urlParams.get('per_page');
         var pageNum = urlParams.get('page');
         var finalUrl = '';
-        console.log(queryString);
-        console.log(perPage, pageNum);
 
         // process per_page selected value on load.
         if (perPage === null) {
@@ -82,7 +80,6 @@ $(function () {
             $('#uae-prev-btn').attr('disabled', true);
         }
 
-        console.log(totalEntries , pageNum , perPage)
         // process next btn on load.
         if ( (totalEntries / pageNum < perPage) && pageNum !== 1 || perPage === totalEntries || perPage >= totalEntries) {
             $('#uae-next-btn').attr('disabled', true);
@@ -213,9 +210,7 @@ function deleteEntryTable(id, name) {
             url: baseUrl + 'entries/' + id,
         }).done((res) => {
             $('#uae-table-single-entry-' + id).hide();
-            console.log('done');
         }).fail((res) => {
-            console.log('failed');
         });
     }
 }
@@ -229,7 +224,6 @@ function deleteSingleEntry(id, name) {
             alert('لقد تم حذف المعاون!');
             window.location.href = baseUrl;
         }).fail((res) => {
-            console.log('failed');
         });
     }
 }
