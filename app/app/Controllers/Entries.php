@@ -286,8 +286,6 @@ class Entries extends BaseController
 		$per_page = $this->request->getVar('per_page'); // if per_page is empty, then it is the default per page which is 10.
 		$per_page = empty($per_page) ? 10 : (int) $per_page;
 
-
-
-		return array_splice($entries, ($page - 1) * $per_page, $page * $per_page);
+		return array_slice($entries, ($page - 1) * $per_page, $per_page);
 	}
 }

@@ -47,120 +47,146 @@ $(function () {
     }
 
     if ($('#uae-action-main-header').length) {
-        $('#aue-num-of-entries').change((e) => {
-            var value = $('#aue-num-of-entries option:selected').val();
-            var url = window.location.href;
-            if (url.indexOf('?') > -1) {
-                url = window.location.href.slice(0, window.location.href.indexOf('?') + 1);
-                const queryString = new URL(window.location.href);
-                const urlParams = new URLSearchParams(queryString.search.slice(1));
-                var counter = 1;
-                for (pair of urlParams.entries()) {
-                    var paramVal = pair[0] === 'per_page' ? value : pair[1];
-                    if (counter === 1) {
-                        url += pair[0] + '=' + paramVal;
-                    } else {
-                        url += '&' + pair[0] + '=' + paramVal;
-                    }
-                    counter++;
-                }
-            } else {
-                url += '?per_page=' + value;
-            }
-            window.location.href = url;
-        });
-
         const queryString = new URL(window.location.href);
-        const urlParams = new URLSearchParams(queryString.search);
-        const perPage = parseInt(urlParams.get('per_page'));
-        if (perPage) {
+        const urlParams = new URLSearchParams(queryString.search.slice(1));
+        var perPage = urlParams.get('per_page');
+        var pageNum = urlParams.get('page');
+        var finalUrl = '';
+        console.log(queryString);
+        console.log(perPage, pageNum);
+
+        // process per_page selected value on load.
+        if (perPage === null) {
+            perPage = 10
+        } else if ( perPage === 'all'){
+            $('#aue-num-of-entries option[value=' + perPage + ']').prop('selected', true);
+            perPage = totalEntries;
+        } else {
+            perPage = parseInt(perPage);
             $('#aue-num-of-entries option[value=' + perPage + ']').prop('selected', true);
         }
 
-        const pageNum = parseInt(urlParams.get('page'));
-        if (pageNum) {
+        // process page number discription value on load.
+        if (pageNum === null) {
+            pageNum = 1;
             $('#uae-page-number').text(pageNum);
             $('#uae-page-total-number').text(Math.ceil(totalEntries / perPage));
         } else {
-            $('#uae-page-number').text(1);
-            $('#uae-page-total-number').text(1);
+            pageNum = parseInt(pageNum);
+            $('#uae-page-number').text(pageNum);
+            $('#uae-page-total-number').text(Math.ceil(totalEntries / perPage));
         }
 
-        if (pageNum <= 1 || urlParams.get('page') === null) {
+        // process prev btn on load.
+        if (pageNum === 1) {
             $('#uae-prev-btn').attr('disabled', true);
         }
 
-        if (pageNum >= Math.ceil(totalEntries / perPage) || urlParams.get('per_page') === 'all' || perPage >= totalEntries) {
+        console.log(totalEntries , pageNum , perPage)
+        // process next btn on load.
+        if ( (totalEntries / pageNum < perPage) && pageNum !== 1 || perPage === totalEntries || perPage >= totalEntries) {
             $('#uae-next-btn').attr('disabled', true);
         }
 
+        $('#aue-num-of-entries').change((e) => {
+            var perPageValue = $('#aue-num-of-entries option:selected').val();
+            if (queryString.href.indexOf('?') > -1) {
+                var tempParams = '';
+                var counter = 1;
+                for (param of urlParams.entries()) {
+                    if (counter !== 1) {
+                        tempParams += '&';
+                    }
+                    if (param[0] === 'per_page') {
+                        tempParams += 'per_page=' + perPageValue;
+                    } else {
+                        tempParams += param[0] + '=' + param[1];
+                    }
+                    counter++;
+                }
 
+                if (tempParams.indexOf('per_page') === -1) {
+                    tempParams += '&per_page=' + perPageValue
+                }
+
+                finalUrl = baseUrl + '?' + tempParams;
+            } else {
+                finalUrl = queryString.href + '?per_page=' + perPageValue;
+            }
+            window.location.href = finalUrl;
+        });
+
+        $('#uae-next-btn').click((e) => {
+            var nextPage = ++pageNum;
+            if (queryString.href.indexOf('?') > -1) {
+                var tempParams = '';
+                var counter = 1;
+                for (param of urlParams.entries()) {
+                    if (counter !== 1) {
+                        tempParams += '&';
+                    }
+                    if (param[0] === 'page') {
+                        tempParams += 'page=' + nextPage;
+                    } else {
+                        tempParams += param[0] + '=' + param[1];
+                    }
+                    counter++;
+                }
+
+                if (urlParams.get('page') === null) {
+                    tempParams += '&page=' + nextPage
+                }
+
+                finalUrl = baseUrl + '?' + tempParams;
+            } else {
+                finalUrl = queryString.href + '?page=' + nextPage;
+            }
+            window.location.href = finalUrl;
+        });
 
         $('#uae-prev-btn').click((e) => {
-            var currentPage = pageNum ? pageNum : 1;
-            var nextPage = --currentPage;
-            var url = window.location.href;
-            if (url.indexOf('?') > -1) {
-                url = window.location.href.slice(0, window.location.href.indexOf('?') + 1);
-                const queryString = new URL(window.location.href);
-                const urlParams = new URLSearchParams(queryString.search.slice(1));
+            var prevPage = --pageNum;
+            if (queryString.href.indexOf('?') > -1) {
+                var tempParams = '';
                 var counter = 1;
-                for (pair of urlParams.entries()) {
-                    var paramVal = pair[0] === 'page' ? nextPage : pair[1];
-                    if (counter === 1) {
-                        url += pair[0] + '=' + paramVal;
+                for (param of urlParams.entries()) {
+                    if (counter !== 1) {
+                        tempParams += '&';
+                    }
+                    if (param[0] === 'page') {
+                        tempParams += 'page=' + prevPage;
                     } else {
-                        url += '&' + pair[0] + '=' + paramVal;
+                        tempParams += param[0] + '=' + param[1];
                     }
                     counter++;
                 }
-            } else {
-                url += '?page=' + nextPage;
-            }
-            window.location.href = url;
-        })
-        $('#uae-next-btn').click((e) => {
-            var currentPage = urlParams.get('page') ? pageNum : 1;
-            var nextPage = ++currentPage;
-            var url = window.location.href;
-            if (url.indexOf('?') > -1) {
-                url = window.location.href.slice(0, window.location.href.indexOf('?') + 1);
-                const queryString = new URL(window.location.href);
-                const urlParams = new URLSearchParams(queryString.search.slice(1));
-                var counter = 1;
-                for (pair of urlParams.entries()) {
-                    var paramVal = pair[0] === 'page' ? nextPage : pair[1];
-                    if (counter === 1) {
-                        url += pair[0] + '=' + paramVal;
-                    } else {
-                        url += '&' + pair[0] + '=' + paramVal;
-                    }
-                    counter++;
-                }
-            } else {
-                url += '?page=' + nextPage;
-            }
 
-            if (!urlParams.get('page')) {
-                url += '&page=' + nextPage;
+                if (urlParams.get('page') === null) {
+                    tempParams += '&page=' + prevPage
+                }
+
+                finalUrl = baseUrl + '?' + tempParams;
+            } else {
+                finalUrl = queryString.href + '?page=' + prevPage;
             }
-            window.location.href = url;
+            window.location.href = finalUrl;
         });
+
 
     }
 
     if ($('.uae-toggle-pass').length) {
         $('.uae-toggle-pass').click((e) => {
             e.preventDefault();
-            if ($(e.target).hasClass('bi-eye-fill')){
+            if ($(e.target).hasClass('bi-eye-fill')) {
                 $(e.target).parent().siblings('input').attr('type', 'text');
-            }else if ($(e.target).hasClass('bi-eye-slash-fill')){
+            } else if ($(e.target).hasClass('bi-eye-slash-fill')) {
                 $(e.target).parent().siblings('input').attr('type', 'password');
             }
             $(e.target).toggleClass('bi-eye-fill');
             $(e.target).toggleClass('bi-eye-slash-fill');
-            
-            
+
+
         });
     }
 
