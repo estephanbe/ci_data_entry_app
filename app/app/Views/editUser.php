@@ -27,8 +27,8 @@
             <div class="mb-5">
                 <label for="co-is_admin" class="form-label">الدور</label>
                 <select class="form-select" name="is_admin" id="co-is_admin">
-                    <option value="admin" <?= $user['is_admin'] ? 'selected' : '' ?>>مدير</option>
-                    <option value="user" <?= $user['is_admin'] ? '' : 'selected' ?>>مشاهد</option>
+                    <option value="1" <?= $user['is_admin'] ? 'selected' : '' ?>>مدير</option>
+                    <option value="0" <?= $user['is_admin'] ? '' : 'selected' ?>>مشاهد</option>
                 </select>
             </div>
 

@@ -27,8 +27,8 @@
             <div class="mb-5">
                 <label for="co-is_admin" class="form-label">الدور</label>
                 <select class="form-select" name="is_admin" id="co-is_admin">
-                    <option value="admin">مدير</option>
-                    <option value="user">مشاهد</option>
+                    <option value="1">مدير</option>
+                    <option value="0">مشاهد</option>
                 </select>
             </div>
 
