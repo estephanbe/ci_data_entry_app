@@ -59,7 +59,7 @@
                 if (empty($entry['photo_url']))
                     $image_url = base_url('assets/images/image_placeholder.webp');
                 else
-                    $image_url = $entry['photo_url'];
+                    $image_url = base_url('uploads/' . $entry['photo_url']);
 
                 echo img(array(
                     'src' => $image_url,

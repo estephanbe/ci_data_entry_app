@@ -17,7 +17,7 @@ class Entries extends BaseController
 	{
 		$entries = new Entry();
 
-		$entries_count = $entries->where('soft_delete', 0)->countAllResults(false);
+		$entries_count = $entries->countAllResults(false);
 
 		$is_search = false;
 		$search_filter = $this->request->getVar('search_filter');
@@ -27,10 +27,9 @@ class Entries extends BaseController
 			$is_search = true;
 			$all_entries = $entries
 				->like($search_filter, $search_term)
-				->having('soft_delete = 0')
 				->findAll();
 		} else {
-			$all_entries = $entries->where('soft_delete', 0)->findAll();
+			$all_entries = $entries->findAll();
 			if (!$this->request->getVar('page') && !$this->request->getVar('per_page')) {
 				$all_entries =  array_splice($all_entries, 0, 10);
 			} else {
@@ -58,8 +57,6 @@ class Entries extends BaseController
 
 
 		if (!$the_entry = $entry->find($id)) {
-			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-		} elseif ($the_entry['soft_delete']) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 		}
 
@@ -113,21 +110,18 @@ class Entries extends BaseController
 
 
 			$file = $this->request->getFile('photo_url');
-			$file_path = '';
+			$newName = '';
 			if ($file->isValid()) {
 				$newName = $file->getRandomName();
 				$file->store('../../../uploads/', $newName);
-				$file_path = base_url() . '/uploads/' . $newName;
+				$model = new Entry();
 			}
-
-			$model = new Entry();
-
 			$newData = [
 				'name' => $this->request->getVar('name'),
 				'country' => $this->request->getVar('country'),
 				'nationality' => $this->request->getVar('nationality'),
 				'occupation' => $this->request->getVar('occupation'),
-				'photo_url' => $file_path,
+				'photo_url' => $newName,
 			];
 			$model->save($newData);
 			session()->setFlashdata('success', 'تم إضافة المتعاون بنجاح!');
@@ -151,9 +145,7 @@ class Entries extends BaseController
 
 		if (!$the_entry = $entry->find($id)) {
 			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-		} elseif ($the_entry['soft_delete']) {
-			throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-		}
+		} 
 
 		$this->view_data(array(
 			'title' => 'تحديث متعاون',
@@ -198,13 +190,12 @@ class Entries extends BaseController
 			$original_entry = $model->find($id);
 
 			$file = $this->request->getFile('photo_url');
-			$file_path = '';
+			$newName = '';
 			if ($file->isValid()) {
 				$newName = $file->getRandomName();
 				$file->store('../../../uploads/', $newName);
-				$file_path = base_url() . '/uploads/' . $newName;
 			} else {
-				$file_path = $original_entry['photo_url'];
+				$newName = $original_entry['photo_url'];
 			}
 
 			$model = new Entry();
@@ -214,7 +205,7 @@ class Entries extends BaseController
 				'country' => $this->request->getVar('country'),
 				'nationality' => $this->request->getVar('nationality'),
 				'occupation' => $this->request->getVar('occupation'),
-				'photo_url' => $file_path,
+				'photo_url' => $newName,
 			];
 			$model->update($id, $newData);
 			session()->setFlashdata('success', 'تم تحديث المتعاون بنجاح!');
@@ -229,8 +220,7 @@ class Entries extends BaseController
 	public function delete($id)
 	{
 		$model = new Entry();
-		$model->update($id, array('soft_delete' => 1));
-
+		$model->delete($id);
 		return true;
 	}
 

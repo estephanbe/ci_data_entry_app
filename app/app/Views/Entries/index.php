@@ -7,7 +7,7 @@
             <select name="search_filter" id="aue-search-type" class="me-2 form-select w-75">
                 <option value="name">الأسماء</option>
                 <option value="country">البلدان</option>
-                <option value="natonality">الجنسيات</option>
+                <option value="nationality">الجنسيات</option>
                 <option value="occupation">المِهن</option>
             </select>
             <span class="uae-search-seperator">عن</span>
